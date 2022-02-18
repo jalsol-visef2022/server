@@ -52,16 +52,16 @@ def most_probable_result(model_prediction):
     prediction = np.argmax(model_prediction, axis=1)
     prediction_size = len(prediction)
     counter = Counter(prediction)
-    
-    if counter[0] >= prediction_size * HEALTHY_THRESHOLD:
-        return 0
-    else:
-        del counter[0]
 
     confidence = 0
     for i in range(prediction_size):
         confidence += model_prediction[i][prediction[i]]
     confidence /= prediction_size
+    
+    if counter[0] >= prediction_size * HEALTHY_THRESHOLD:
+        return 0, str(round(confidence * 100, 2))
+    else:
+        del counter[0]
 
     return label[counter.most_common(1)[0][0]], str(round(confidence * 100, 2))
 
