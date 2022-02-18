@@ -59,7 +59,7 @@ def most_probable_result(model_prediction):
     confidence /= prediction_size
     
     if counter[0] >= prediction_size * HEALTHY_THRESHOLD:
-        return 0, str(round(confidence * 100, 2))
+        return label[0], str(round(confidence * 100, 2))
     else:
         del counter[0]
 
