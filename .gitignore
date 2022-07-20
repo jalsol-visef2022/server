@@ -127,8 +127,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# others
-image_from_api.jpg
-storage
-test
