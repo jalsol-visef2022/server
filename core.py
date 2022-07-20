@@ -92,7 +92,7 @@ def get_prediction(file):
         path = f'storage/buffer/{long_symptom_labels[classification[i]]}'
 
         _ = Image.fromarray(original_img[i], 'RGB')
-        _.save(f'{path}/{int(time.time_ns())}.jpg')
+        _.save(f'{path}/{time.time_ns()}.jpg')
 
     counter = Counter(classification)
 

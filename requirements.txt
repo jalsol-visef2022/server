@@ -1,3 +1,5 @@
 tensorflow
 pillow
 flask
+apscheduler
+scipy

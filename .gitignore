@@ -132,3 +132,5 @@ dmypy.json
 image_from_api.jpg
 test/
 storage/
+backup_model/
+xception_model/

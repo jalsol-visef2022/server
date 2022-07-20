@@ -1,6 +1,12 @@
 from flask import Flask, app, request, jsonify
+import time
+
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 from core import get_prediction
+import retrain
 
 app = Flask(__name__)
 
@@ -8,9 +14,10 @@ app = Flask(__name__)
 @app.route('/predict/', methods=['POST'])
 def send_image():
     file = request.files['image']
-    file.save('./image_from_api.jpg')
+    path = f'storage/cache/{time.time_ns()}.jpg'
 
-    prediction, confidence = get_prediction('./image_from_api.jpg')
+    file.save(path)
+    prediction, confidence = get_prediction(path)
 
     payload = {
         'Status': 'Success',
@@ -32,8 +39,16 @@ def send_image():
 
 
 if __name__ == '__main__':
-    # url = ngrok.connect(5000).public_url
-    # print('>>> Henzy Tunnel URL:', url)
+    scheduler = BackgroundScheduler()
+    scheduler.start()
 
-    # app.run(host='192.168.1.105', port=5000, debug=True, threaded=False)
+    trigger = CronTrigger(
+        year="*", month="*", day="*",
+        hour="0", minute="0", second="0"
+    )
+
+    scheduler.add_job(retrain.retrain, trigger=trigger)
+
     app.run(host='0.0.0.0', port=5000, debug=False, threaded=False)
+
+    atexit.register(lambda: scheduler.shutdown())
